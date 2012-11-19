@@ -85,6 +85,19 @@ public class FlexBase64Test {
             "ZSBhZ2FpbnN0IHRlcnJpYmxlIG9kZHMsIHdpbiB0aHJvdWdoLCBhbmQgc3RpbGwga25vd3Mgd2hl\r\n"+
             "cmUgaGlzIHRvd2VsIGlzIGlzIGNsZWFybHkgYSBtYW4gdG8gYmUgcmVja29uZWQgd2l0aC4K\r\n";
 
+    private static final String KNOWLEDGE =
+            "Man is distinguished, not only by his reason, but by this singular passion from " +
+            "other animals, which is a lust of the mind, that by a perseverance of delight " +
+            "in the continued and indefatigable generation of knowledge, exceeds the short " +
+            "vehemence of any carnal pleasure.";
+
+    private static final String KNOWLEDGE_ENCODED =
+            "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz\r\n" +
+            "IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg\r\n" +
+            "dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu\r\n" +
+            "dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo\r\n" +
+            "ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\r\n";
+
     @Test
     public void testEncoderDecoder() throws IOException {
         byte[] nums = new byte[32768];
@@ -238,16 +251,8 @@ public class FlexBase64Test {
 
     @Test
     public void testEncodeString() throws Exception {
-        byte[] data = ("Man is distinguished, not only by his reason, but by this singular passion from " +
-                    "other animals, which is a lust of the mind, that by a perseverance of delight " +
-                    "in the continued and indefatigable generation of knowledge, exceeds the short " +
-                    "vehemence of any carnal pleasure.").getBytes("US-ASCII");
-
-        String expect = "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz\r\n" +
-                        "IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg\r\n" +
-                        "dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu\r\n" +
-                        "dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo\r\n" +
-                        "ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\r\n";
+        byte[] data = KNOWLEDGE.getBytes("US-ASCII");
+        String expect = KNOWLEDGE_ENCODED;
 
         Assert.assertEquals(expect, FlexBase64.encodeString(data, true));
         Assert.assertEquals(expect, FlexBase64.encodeString(ByteBuffer.wrap(data), true));
@@ -260,16 +265,8 @@ public class FlexBase64Test {
 
     @Test
     public void testEncodeBytes() throws Exception {
-        byte[] data = ("Man is distinguished, not only by his reason, but by this singular passion from " +
-                    "other animals, which is a lust of the mind, that by a perseverance of delight " +
-                    "in the continued and indefatigable generation of knowledge, exceeds the short " +
-                    "vehemence of any carnal pleasure.").getBytes("US-ASCII");
-
-        byte[] expect = ("TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz\r\n" +
-                        "IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg\r\n" +
-                        "dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu\r\n" +
-                        "dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo\r\n" +
-                        "ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\r\n").getBytes("US-ASCII");
+        byte[] data = KNOWLEDGE.getBytes("US-ASCII");
+        byte[] expect = KNOWLEDGE_ENCODED.getBytes("US-ASCII");
 
         Assert.assertArrayEquals(expect, FlexBase64.encodeBytes(data, 0, data.length, true));
 
@@ -278,29 +275,35 @@ public class FlexBase64Test {
 
     @Test
     public void testDecodeString() throws Exception {
-        String expect = "Man is distinguished, not only by his reason, but by this singular passion from " +
-                    "other animals, which is a lust of the mind, that by a perseverance of delight " +
-                    "in the continued and indefatigable generation of knowledge, exceeds the short " +
-                    "vehemence of any carnal pleasure.";
 
-        String encoded = "TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlz\r\n" +
-                        "IHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2Yg\r\n" +
-                        "dGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu\r\n" +
-                        "dWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRo\r\n" +
-                        "ZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\r\n";
+        ByteBuffer buffer = FlexBase64.decode(KNOWLEDGE_ENCODED);
+        Assert.assertEquals(KNOWLEDGE, new String(buffer.array(), 0, buffer.limit(), "US-ASCII"));
 
-        ByteBuffer buffer = FlexBase64.decode(encoded);
-        Assert.assertEquals(expect, new String(buffer.array(), buffer.arrayOffset(), buffer.limit(), "US-ASCII"));
+        buffer = FlexBase64.decode(ByteBuffer.wrap(KNOWLEDGE_ENCODED.getBytes("US-ASCII")));
+        Assert.assertEquals(KNOWLEDGE, new String(buffer.array(), 0, buffer.limit(), "US-ASCII"));
 
-        buffer = FlexBase64.decode(ByteBuffer.wrap(encoded.getBytes("US-ASCII")));
-        Assert.assertEquals(expect, new String(buffer.array(), buffer.arrayOffset(), buffer.limit(), "US-ASCII"));
+        buffer = FlexBase64.decode(KNOWLEDGE_ENCODED.getBytes("US-ASCII"), 0, KNOWLEDGE_ENCODED.length());
+        Assert.assertEquals(KNOWLEDGE, new String(buffer.array(), 0, buffer.limit(), "US-ASCII"));
 
-        buffer = FlexBase64.decode(encoded.getBytes("US-ASCII"), 0, encoded.length());
-        Assert.assertEquals(expect, new String(buffer.array(), buffer.arrayOffset(), buffer.limit(), "US-ASCII"));
+        byte[] output = new byte[KNOWLEDGE.length()];
+        FlexBase64.createDecoder().decode(KNOWLEDGE_ENCODED, output);
+        Assert.assertEquals(KNOWLEDGE, new String(output, 0, output.length, "US-ASCII"));
+    }
 
-        byte[] output = new byte[expect.length()];
-        FlexBase64.createDecoder().decode(encoded, output);
-        Assert.assertEquals(expect, new String(output, 0, output.length, "US-ASCII"));
+    @Test
+    public void testURLString() throws Exception {
+        byte[] source = {0x6b, (byte) 0xf6, (byte) 0xfe};
+        Assert.assertEquals("a_b-", FlexBase64.encodeURLString(source, 0, 3));
+        Assert.assertArrayEquals(source, FlexBase64.decode("a_b-").array());
+        String actual = FlexBase64.encodeURLString("test".getBytes("UTF-8"), 0, 4);
+        Assert.assertEquals("dGVzdA", actual);
+        ByteBuffer decode = FlexBase64.decode(actual);
+        Assert.assertEquals("test", new String(decode.array(), 0, decode.limit(), "UTF-8"));
+        byte[] bytes = TOWEL.getBytes("UTF-8");
+        Assert.assertEquals(TOWEL_BASE64.replace("\r\n",""), FlexBase64.encodeURLString(ByteBuffer.wrap(bytes)));
+        bytes = KNOWLEDGE.getBytes("UTF-8");
+        String replace = KNOWLEDGE_ENCODED.replace("\r\n", "");
+        Assert.assertEquals(replace.substring(0, replace.length() - 1), FlexBase64.encodeURLString(ByteBuffer.wrap(bytes)));
     }
 
     @Test
